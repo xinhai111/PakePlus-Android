@@ -1,0 +1,16 @@
+{
+  "name": "小雅雅思 · 每天 30 分钟",
+  "short_name": "小雅雅思",
+  "description": "移动优先雅思学习：背词、写作、口语、进度。自带 AI Key 即可获得四维点评，数据全部留在本机。",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f5e9",
+  "theme_color": "#f4f5e9",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
