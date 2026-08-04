@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4f5e9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>小雅雅思 · 每天 30 分钟</title>
+<meta name="description" content="移动优先雅思学习：背词、写作、口语、进度，自带 AI Key 即可获得四维点评，数据全部留在本机。">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app" id="app">
+
+  <header class="app-head">
+    <span class="wordmark">小雅<span>雅思</span></span>
+    <svg class="sprout" id="sprout" viewBox="0 0 34 34" aria-hidden="true" focusable="false">
+      <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none">
+        <path d="M17 30V14" />
+        <path d="M17 20C13 16 9 15.5 6.5 17c1.5-4.5 6-7 10.5-7.5C21.5 9.5 26 12 27.5 16.5 25 15.5 21 16 17 20Z" fill="currentColor" stroke="none" opacity="0.35" />
+        <path d="M17 17C19.5 13.5 23.5 12.5 26.5 14" />
+        <path d="M17 14C15 11.5 12 10.5 9 11" />
+      </g>
+    </svg>
+    <span class="spacer"></span>
+  </header>
+
+  <main>
+    <!-- ============ 首页 ============ -->
+    <section id="view-home" class="view is-active">
+      <div class="home">
+        <div class="greet">
+          <h1 id="greetTitle">不积跬步，无以至千里。</h1>
+        </div>
+
+        <div class="bento">
+          <article class="tile tile--plan">
+            <div class="plan-head">
+              <div class="plan-title">
+                <span class="t-label">TODAY · 今日计划</span>
+                <h3>今天做些什么</h3>
+              </div>
+              <button class="btn btn--soft btn--sm" id="planFocusBtn">专注</button>
+            </div>
+            <div class="plan-list" id="planList"></div>
+            <button class="plan-add" id="planAddBtn">＋ 添加一行</button>
+          </article>
+
+          <article class="tile tile--mod tile--wrong" id="homeWrongTile">
+            <span class="tile-badge" style="--mod-bg: var(--color-accent-3);">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 2.9h8.4a1.5 1.5 0 0 1 1.5 1.5v8.7a1.5 1.5 0 0 1-1.5 1.5H2.7a1.5 1.5 0 0 1-1.5-1.5V4.4a1.5 1.5 0 0 1 1.5-1.5Z"/><path d="m5.5 5.7 5 5M10.5 5.7l-5 5" stroke="var(--color-accent-3-deep)" stroke-width="2.3"/></svg>
+              <i class="badge-dot" id="homeWrongDot" style="display:none;">0</i>
+            </span>
+            <h3>错词本</h3>
+            <small id="homeWrongSmall">0 个错词</small>
+          </article>
+
+          <article class="tile tile--mod tile--coach" id="homeCoachTile">
+            <span class="tile-badge" style="--mod-bg: var(--color-lavender);">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 5.1a1.6 1.6 0 0 1 1.6-1.6h7.4a1.6 1.6 0 0 1 1.6 1.6v3.7a1.6 1.6 0 0 1-1.6 1.6H7.3l-3 2.5v-2.5h-.1a1.6 1.6 0 0 1-1.5-1.6Z"/><path d="m8 5.9.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5Z"/><path d="M11.9 2.4l.35.8.8.35-.8.35-.35.8-.35-.8-.8-.35.8-.35Z"/></svg>
+            </span>
+            <h3>AI 教练</h3>
+            <small id="homeCoachSmall">先完成 2 次 AI 点评</small>
+          </article>
+
+          <article class="tile tile--mod tile--exam" id="homeExamTile">
+            <span class="tile-badge" style="--mod-bg: var(--color-mint);">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3.7" width="11" height="9.8" rx="1.6"/><path d="M5.4 2v3.4M10.6 2v3.4M2.5 6.9h11"/><circle cx="8" cy="10.5" r="1.5"/></svg>
+            </span>
+            <h3>考试倒计时</h3>
+            <small id="homeExamSmall">设个考试日吧</small>
+            <b class="exam-days" id="homeExamDays">—</b>
+          </article>
+
+          <article class="tile tile--mod" data-view="progress">
+            <span class="tile-badge" style="--mod-bg: var(--color-mint);">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="5.2" r="2.7"/><path d="M3.5 13.5c.7-2.4 2.4-3.6 4.5-3.6s3.8 1.2 4.5 3.6"/></svg>
+            </span>
+            <h3>进度</h3>
+            <small id="modProgressSmall">本周 0 天</small>
+          </article>
+
+          <article class="tile tile--wide">
+            <span class="t-label">WORDS · 今日词汇</span>
+            <div class="word-row" id="homeWordRow">
+              <span class="word-card">sustainable<small>adj. 可持续的</small></span>
+              <span class="word-card">mitigate<small>v. 缓解</small></span>
+              <span class="word-card">substantial<small>adj. 大量的</small></span>
+            </div>
+            <p id="homeWordsMeta" style="font-size:0.75rem;color:var(--color-ink-3);">今日 12 词 · 已掌握 0 词</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 背词 ============ -->
+    <section id="view-words" class="view">
+      <div class="screen">
+        <div class="screen-head">
+          <span class="mono">WORDS · 背词</span>
+          <h2>背一组词。</h2>
+          <p>看英文回忆释义，点卡片看答案，记住的标记掌握。</p>
+        </div>
+        <div class="chip-row" id="wordSetChips" aria-label="选择背词"></div>
+        <div class="word-tools">
+          <button class="btn btn--outline btn--sm" id="wordManageBtn">词组管理</button>
+          <button class="btn btn--outline btn--sm" id="wordAddWordBtn">＋ 添加单词</button>
+          <button class="btn btn--outline btn--sm" id="wordImportBtn">批量导入</button>
+        </div>
+        <div class="review-banner hidden" id="wordReviewBanner" role="status">
+          <span id="wordReviewBannerText"></span>
+          <button class="btn btn--soft btn--sm" id="wordReviewStart">开始复习</button>
+        </div>
+        <div class="word-deck" id="wordDeck"></div>
+      </div>
+    </section>
+
+    <!-- ============ 错词本 ============ -->
+    <section id="view-wrong" class="view">
+      <div class="screen">
+        <div class="screen-head">
+          <span class="mono">WRONG · 错词本</span>
+          <h2>翻过的车，都算数。</h2>
+          <p>背词时点「忘了」会收进来。点词复习，记住后移除。</p>
+        </div>
+        <div class="wrong-tools">
+          <button class="btn btn--outline btn--sm" id="wrongWeaknessBtn">AI 弱项分析</button>
+          <button class="btn btn--outline btn--sm" id="wrongClearBtn">清空错词本</button>
+        </div>
+        <div class="list" id="wrongList"></div>
+        <div class="empty-state hidden" id="wrongEmpty">
+          <h3>错词本还是空的</h3>
+          <p>背词时点「忘了」，单词会自动收进来。</p>
+          <button class="btn btn--coral" id="wrongGoWords">去背词</button>
+        </div>
+        <div class="wrong-review hidden" id="wrongReview">
+          <div class="word-progress-line" id="wrongProgressLine"></div>
+          <button class="word-front" id="wrongFront" aria-label="点击看释义" aria-pressed="false">
+            <span class="word-face word-face--front">
+              <span class="w-word" id="wrongW"></span>
+              <span class="w-phon" id="wrongPhon"></span>
+            </span>
+            <span class="word-face word-face--back">
+              <span class="w-def" id="wrongDef"></span>
+              <span class="w-zh" id="wrongZh"></span>
+            </span>
+          </button>
+          <div class="deck-actions">
+            <button class="btn btn--soft" id="wrongAgain">忘了，再学</button>
+            <button class="btn btn--coral" id="wrongKeep">记住了</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 写作 ============ -->
+    <section id="view-writing" class="view">
+      <!-- 题目列表 -->
+      <div class="screen" id="writingList">
+        <div class="screen-head">
+          <span class="mono">WRITING · ACADEMIC</span>
+          <h2>选一道题。</h2>
+          <p>Task 1 图表题 20 分钟 · 150 词；Task 2 议论文 40 分钟 · 250 词。</p>
+        </div>
+        <div class="chip-row" aria-label="选择任务类型">
+          <button class="chip" data-wseg="t1">TASK 1 · 图表</button>
+          <button class="chip is-on" data-wseg="t2">TASK 2 · 议论文</button>
+          <button class="btn btn--outline btn--sm" id="writingHistBtn" style="margin-left:auto;">历史记录</button>
+        </div>
+        <div class="list" id="writingPromptList"></div>
+      </div>
+
+      <!-- 写作编辑器 -->
+      <div class="screen hidden" id="writingEditor">
+        <div class="screen-head">
+          <button class="mono" id="writingBack" style="text-align:left;color:var(--color-accent-2-deep);">← 返回题目列表</button>
+          <h2 id="writingTitle"></h2>
+        </div>
+        <div class="topic-card">
+          <span class="part-tag" id="writingTaskTag"></span>
+          <div class="chart-box hidden" id="writingChart"></div>
+          <p class="hint" id="writingPromptText"></p>
+        </div>
+        <div class="writing-meta">
+          <span id="writingTimer">40:00</span>
+          <div class="word-ring" role="img" aria-label="词数进度">
+            <svg viewBox="0 0 40 40" aria-hidden="true">
+              <circle class="wr-track" cx="20" cy="20" r="16"></circle>
+              <circle class="wr-bar" id="writingRingBar" cx="20" cy="20" r="16"></circle>
+            </svg>
+            <span class="wr-num" id="writingCount">0</span>
+          </div>
+        </div>
+        <textarea class="editor" id="writingEssay" placeholder="开始写吧……（自动保存草稿）" aria-label="作文编辑器"></textarea>
+        <div style="display:flex;gap:var(--space-sm);">
+          <button class="btn btn--soft btn--sm" id="writingSave" style="flex:1;">保存</button>
+          <button class="btn btn--outline btn--sm" id="writingOutline" style="flex:1;">AI 大纲</button>
+          <button class="btn btn--soft btn--sm" id="writingExpr" style="flex:1;">表达库</button>
+          <button class="btn btn--coral btn--sm" id="writingSubmit" style="flex:2;">提交点评</button>
+        </div>
+        <div id="writingResult"></div>
+      </div>
+    </section>
+
+    <!-- ============ 口语 ============ -->
+    <section id="view-speaking" class="view">
+      <div class="screen">
+        <div class="screen-head">
+          <span class="mono">SPEAKING · 口语</span>
+          <h2>开口说，说满两分钟。</h2>
+          <p>Part 1 即问即答 · Part 2 准备 1 分钟说 2 分钟 · Part 3 考官追问。录音仅存本机，点评基于转写文本。</p>
+        </div>
+        <div class="chip-row" aria-label="选择口语部分">
+          <button class="chip" data-sseg="p1">PART 1 · 问答</button>
+          <button class="chip is-on" data-sseg="p2">PART 2 · 卡片</button>
+          <button class="chip" data-sseg="p3">PART 3 · 追问</button>
+          <button class="btn btn--outline btn--sm" id="speakingHistBtn" style="margin-left:auto;">历史记录</button>
+        </div>
+
+        <div class="topic-card hidden" id="part1Box">
+          <span class="part-tag">PART 1 · 即问即答</span>
+          <h3 id="part1Q"></h3>
+          <div class="tip-row" id="part1Tips"></div>
+        </div>
+
+        <div class="topic-card hidden" id="part3Box">
+          <span class="part-tag">PART 3 · 考官追问</span>
+          <p class="hint">考官会顺着你的回答连续追问 4-5 个问题。先想 30 秒，再开口回答。</p>
+          <ul class="review-block" id="part3Questions"></ul>
+        </div>
+
+        <div class="topic-card" id="part2Card">
+          <span class="part-tag">PART 2 · 卡片题</span>
+          <h3 id="speakingTitle"></h3>
+          <p class="hint" id="speakingPoints"></p>
+        </div>
+        <div style="display:flex;gap:var(--space-sm);">
+          <button class="btn btn--outline" id="speakingNext" style="flex:1;">换一题</button>
+          <button class="btn" id="speakingTimerBtn" style="flex:2;">开始准备</button>
+        </div>
+        <div class="timer-row" id="speakingTimerRow">
+          <div class="timer-cell">
+            <span class="mono">PREP · 准备</span>
+            <span class="time" id="prepTime">1:00</span>
+          </div>
+          <div class="timer-cell">
+            <span class="mono">SPEAK · 陈述</span>
+            <span class="time" id="speakTime">2:00</span>
+          </div>
+        </div>
+
+        <div id="recArea">
+          <canvas class="wave-canvas" id="recWave" width="600" height="80" aria-hidden="true"></canvas>
+          <div style="text-align:center;">
+            <button class="rec-button" id="recBtn" aria-label="开始录音">
+              <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="4.5" width="8" height="11" rx="4"/><path d="M6.5 13.5a7.5 7.5 0 0 0 15 0"/><path d="M14 21v4"/></svg>
+            </button>
+            <div class="rec-status" id="recStatus">点击录音，最多 2 分钟</div>
+          </div>
+          <audio class="audio-player hidden" id="recPlayback" controls aria-label="录音回放"></audio>
+        </div>
+
+        <label class="field" id="speakingTranscriptField">
+          <span>陈述转写文本（可选，粘贴或输入）</span>
+          <button class="btn btn--outline btn--sm" id="dictateBtn" style="align-self:flex-start;display:none;" aria-pressed="false">开始听写</button>
+          <textarea class="textarea" id="speakTranscript" placeholder="把刚才说的话粘贴到这里，或点「开始听写」实时转写，AI 会按流利度、发音、词汇、语法四维点评。"></textarea>
+        </label>
+        <button class="btn btn--coral btn--block" id="speakingSubmit">提交点评</button>
+        <div id="speakingResult"></div>
+      </div>
+    </section>
+
+    <!-- ============ 进度 ============ -->
+    <section id="view-progress" class="view">
+      <div class="screen">
+        <div class="screen-head">
+          <span class="mono">PROGRESS · 进度</span>
+          <h2>让分数长出来。</h2>
+          <p>全部统计只存在这台手机里。</p>
+        </div>
+
+        <div class="card card--tint-pear">
+          <span class="t-label">STREAK · 连续打卡</span>
+          <div class="checkin-count"><span id="progressStreak">0</span><sup> 天</sup></div>
+          <p>今天 <span id="progressTodayDone">还没有</span>打卡。</p>
+          <button class="btn btn--coral btn--sm" id="progressCheckinBtn" style="align-self:flex-start;">打卡</button>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-cell">
+            <span class="st-label">已掌握词</span>
+            <span class="st-val" id="statWords">0</span>
+          </div>
+          <div class="stat-cell">
+            <span class="st-label">作文篇数</span>
+            <span class="st-val" id="statWriting">0</span>
+          </div>
+          <div class="stat-cell">
+            <span class="st-label">口语段数</span>
+            <span class="st-val" id="statSpeaking">0</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="t-label">THIS MONTH · 本月打卡</span>
+          <div class="cal-grid" id="calGrid" aria-label="本月打卡日历"></div>
+        </div>
+
+        <div class="card">
+          <span class="t-label">BANDS · 最近评分</span>
+          <div class="bar-row">
+            <div class="br-top"><span>写作</span><b id="bandWritingVal">—</b></div>
+            <div class="progress progress--mint"><i id="bandWritingBar" style="width:0%"></i></div>
+          </div>
+          <div class="bar-row">
+            <div class="br-top"><span>口语</span><b id="bandSpeakingVal">—</b></div>
+            <div class="progress progress--coral"><i id="bandSpeakingBar" style="width:0%"></i></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="t-label">HISTORY · 最近记录</span>
+          <div class="list" id="historyList" style="margin-top:4px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 我的 ============ -->
+    <section id="view-settings" class="view">
+      <div class="screen">
+        <div class="screen-head">
+          <span class="mono">PROFILE · 我的</span>
+          <h2>设置。</h2>
+          <p>AI 密钥只保存在本机浏览器里，随点评请求发送，不经过任何中间服务器。</p>
+        </div>
+
+        <div class="card card--dashed setting-fold is-open">
+          <button class="fold-head" aria-expanded="true">
+            <span class="t-label">AI 配置</span>
+            <span class="fold-caret">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+            </span>
+          </button>
+          <div class="fold-body">
+            <div class="setting-row" style="background:var(--color-paper-3);">
+              <div class="sr-text">
+                <div class="sr-title">当前状态</div>
+                <div class="sr-sub">AI 点评、备考教练与弱项分析共用这一份配置</div>
+              </div>
+              <span class="key-chip key-chip--none" id="keyStatusChip">未配置</span>
+            </div>
+            <div class="setting-group">
+              <div class="setting-row">
+                <div class="sr-text">
+                  <div class="sr-title">接口类型</div>
+                  <div class="sr-sub">OpenAI 兼容接口（OpenAI/DeepSeek 等）或 Anthropic Claude</div>
+                </div>
+                <div class="segment" role="radiogroup" aria-label="AI 接口类型">
+                  <button class="seg-btn" data-provider="openai" role="radio" aria-checked="true">OpenAI 兼容</button>
+                  <button class="seg-btn" data-provider="claude" role="radio" aria-checked="false">Claude</button>
+                </div>
+              </div>
+              <label class="field">
+                <span>API Base URL</span>
+                <input class="input" id="cfgBaseUrl" type="url" autocomplete="off" spellcheck="false" aria-label="API Base URL">
+                <span class="hint-text" id="cfgBaseUrlHint">OpenAI 兼容接口均可，如 DeepSeek：https://api.deepseek.com（/v1 亦可）。</span>
+              </label>
+              <label class="field">
+                <span>模型</span>
+                <select class="select" id="cfgModel" aria-label="模型"></select>
+              </label>
+              <label class="field">
+                <span>API Key</span>
+                <input class="input" id="cfgKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-... 或 xai-..." aria-label="API Key">
+                <span class="hint-text" id="cfgKeyHint">只存本机。随请求直接发送给对应接口。</span>
+              </label>
+              <div style="display:flex;gap:var(--space-sm);">
+                <button class="btn btn--outline btn--sm" id="cfgFetchModels" style="flex:1;">拉取模型列表</button>
+                <button class="btn btn--outline btn--sm" id="cfgTestLatency" style="flex:1;">测试连接</button>
+              </div>
+              <span class="hint-text" id="cfgAiStatus">拉取可自动获取该接口的全部可用模型；测试会发一个最小请求实测延迟。</span>
+              <button class="btn btn--cyan" id="cfgSave">保存配置</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--dashed setting-fold">
+          <button class="fold-head" aria-expanded="false">
+            <span class="t-label">外观</span>
+            <span class="fold-caret">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+            </span>
+          </button>
+          <div class="fold-body">
+            <div class="setting-group">
+              <div class="setting-row">
+                <div class="sr-text">
+                  <div class="sr-title">自定义背景</div>
+                  <div class="sr-sub">选一张图片作为软件背景，自动压缩后只保存在本机</div>
+                </div>
+                <label class="btn btn--outline btn--sm" for="bgFileInput">选择图片</label>
+                <input type="file" id="bgFileInput" accept="image/*" hidden>
+              </div>
+              <div class="bg-preview" id="bgPreview">暂无背景 · 当前为默认纸色</div>
+              <div class="bg-veil-row">
+                <label class="sr-sub" for="bgVeilRange">遮罩强度</label>
+                <input type="range" id="bgVeilRange" min="50" max="90" step="5" value="72" aria-label="遮罩强度">
+                <span class="mono" id="bgVeilVal">72%</span>
+              </div>
+              <span class="hint-text">选择图片后先裁剪选区，再压缩至最长边 1280px 存入本机；换图或恢复默认后原文件即被移除。</span>
+              <button class="btn btn--soft btn--block" id="bgResetBtn">恢复默认背景</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--dashed setting-fold">
+          <button class="fold-head" aria-expanded="false">
+            <span class="t-label">发音</span>
+            <span class="fold-caret">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+            </span>
+          </button>
+          <div class="fold-body">
+            <div class="setting-group">
+              <div class="setting-row">
+                <div class="sr-text">
+                  <div class="sr-title">发音音色</div>
+                  <div class="sr-sub">在线有道发音，贴近雅思英音语境</div>
+                </div>
+                <div class="segment" role="radiogroup" aria-label="发音音色">
+                  <button class="seg-btn" data-tts="1" role="radio" aria-checked="true">英音</button>
+                  <button class="seg-btn" data-tts="0" role="radio" aria-checked="false">美音</button>
+                </div>
+              </div>
+              <span class="hint-text">离线或加载失败时自动回退系统语音。默认英音（雅思 UK 语境）。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--dashed setting-fold">
+          <button class="fold-head" aria-expanded="false">
+            <span class="t-label">数据</span>
+            <span class="fold-caret">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+            </span>
+          </button>
+          <div class="fold-body">
+            <div class="setting-group">
+              <button class="btn btn--outline btn--block" id="clearDataBtn">清除全部本地数据</button>
+              <span class="hint-text">打卡、背词进度、作文与口语记录都会清空。不可恢复。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--dashed setting-fold">
+          <button class="fold-head" aria-expanded="false">
+            <span class="t-label">关于</span>
+            <span class="fold-caret">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+            </span>
+          </button>
+          <div class="fold-body">
+            <div class="setting-group">
+              <p class="about-line">作者：寒江雪</p>
+              <p class="about-line">天行健，君子以自强<span class="egg-word" id="eggWord">不息</span>。</p>
+              <p class="about-line">版本 0.1</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 底部 Tab · N1b -->
+  <nav class="tabbar" aria-label="主导航">
+    <span class="tabbar-indicator" id="tabbarIndicator" aria-hidden="true"></span>
+    <button class="tab is-active" data-view="home" aria-label="首页">
+      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="15" height="13.5" rx="2.5"/><path d="M3.5 9.2h15"/><path d="M7.3 2.8v3.2"/><path d="M14.7 2.8v3.2"/><path d="m8.1 13.5 2 2 3.9-3.9"/></svg>
+      <span class="t-name">首页</span>
+    </button>
+    <button class="tab" data-view="words" aria-label="背词">
+      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H9a2 2 0 0 1 2 2v11.5a1.8 1.8 0 0 0-1.8-1.8H5.5A1.5 1.5 0 0 0 4 17.2Z"/><path d="M18 5.5A1.5 1.5 0 0 0 16.5 4H13a2 2 0 0 0-2 2v11.5a1.8 1.8 0 0 1 1.8-1.8h3.7a1.5 1.5 0 0 1 1.5 1.5Z"/><path d="M9.8 8.2h2.4"/><path d="M9.8 11h2.4"/></svg>
+      <span class="t-name">背词</span>
+    </button>
+    <button class="tab" data-view="writing" aria-label="写作">
+      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17.5h3.6L17 9.1a1.9 1.9 0 0 0 0-2.7l-.9-.9a1.9 1.9 0 0 0-2.7 0L5 14.2Z"/><path d="M14.2 6.2l1.6 1.6"/></svg>
+      <span class="t-name">写作</span>
+    </button>
+    <button class="tab" data-view="speaking" aria-label="口语">
+      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3.5" width="6" height="8.6" rx="3"/><path d="M5 10.5a6 6 0 0 0 12 0"/><path d="M11 16.5v3"/><path d="M8.2 19.5h5.6"/></svg>
+      <span class="t-name">口语</span>
+    </button>
+    <button class="tab" data-view="settings" aria-label="我的">
+      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="7.2" r="3.4"/><path d="M5.2 18c.9-3.1 3.1-4.7 5.8-4.7s4.9 1.6 5.8 4.7"/></svg>
+      <span class="t-name">我的</span>
+    </button>
+  </nav>
+
+  <!-- 底部弹层 -->
+  <div class="sheet-backdrop" id="sheetBackdrop" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-head">
+        <h3 id="sheetTitle"></h3>
+        <button class="sheet-close" id="sheetClose" aria-label="关闭">×</button>
+      </div>
+      <div id="sheetBody"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- 全屏沉浸式专注模式 -->
+  <div class="focus-mode" id="focusOverlay" aria-hidden="true">
+    <div class="focus-top">
+      <span class="mono" id="focusDate"></span>
+      <button class="btn btn--outline btn--sm" id="focusClose">退出专注</button>
+    </div>
+    <div class="focus-clock" id="focusClock">00:00</div>
+    <div class="focus-clock-label" id="focusClockLabel">未开始 · 选择下方任务开始计时</div>
+    <div class="focus-progress" id="focusProgress">0 / 0 完成</div>
+    <div class="focus-list" id="focusList"></div>
+    <div class="focus-actions">
+      <button class="btn btn--outline" id="focusPomo">开始番茄 · 25:00</button>
+      <button class="btn" id="focusCountup">开始正计时</button>
+    </div>
+  </div>
+
+  <!-- 背景裁剪 -->
+  <div class="crop-mode" id="cropOverlay" aria-hidden="true">
+    <div class="crop-top">
+      <span class="mono">CROP · 选择背景区域</span>
+      <button class="btn btn--outline btn--sm" id="cropCancel">取消</button>
+    </div>
+    <div class="crop-stage" id="cropStage">
+      <img id="cropImg" alt="背景原图">
+      <div class="crop-box" id="cropBox">
+        <i class="crop-handle" id="cropHandle" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="crop-bar">
+      <div class="chip-row" id="cropRatio" aria-label="裁剪比例">
+        <button class="chip is-on" data-ratio="9:16">9:16 全屏</button>
+        <button class="chip" data-ratio="1:1">1:1 方图</button>
+        <button class="chip" data-ratio="free">自由</button>
+      </div>
+      <div style="display:flex;gap:var(--space-sm);">
+        <button class="btn btn--outline btn--sm" id="cropReset" style="flex:1;">重置</button>
+        <button class="btn btn--coral btn--sm" id="cropConfirm" style="flex:2;">确认裁剪</button>
+      </div>
+      <span class="hint-text">拖动图片选择位置 · 双指或滚轮缩放 · 双击回到初始</span>
+    </div>
+  </div>
+
+  <!-- 彩蛋 · 心理疗愈室 -->
+  <div class="heal-mode" id="healOverlay" aria-hidden="true">
+    <div class="heal-top">
+      <span class="mono">PSYCH ROOM · 心理疗愈室</span>
+      <button class="btn btn--outline btn--sm" id="healClose">离开</button>
+    </div>
+    <div class="heal-mood" id="healMood">
+      <p class="heal-mood-title">此刻，你想被怎样治愈？</p>
+      <div class="heal-mood-grid">
+        <button class="heal-mood-btn" data-mood="calm">
+          <span class="hm-name">平静</span>
+          <span class="hm-sub">6-4-6 呼吸 · 溪流</span>
+        </button>
+        <button class="heal-mood-btn" data-mood="anxious">
+          <span class="hm-name">焦虑</span>
+          <span class="hm-sub">4-7-8 呼吸 · 白噪</span>
+        </button>
+        <button class="heal-mood-btn" data-mood="tired">
+          <span class="hm-name">疲劳</span>
+          <span class="hm-sub">4-4-4 箱式 · 雨声</span>
+        </button>
+        <button class="heal-mood-btn" data-mood="sleep">
+          <span class="hm-name">助眠</span>
+          <span class="hm-sub">睡眠模式 · 海浪</span>
+        </button>
+      </div>
+      <p class="heal-mood-hint">呼吸时跟着光环起伏，把注意力放回身体。</p>
+    </div>
+    <div class="heal-body">
+      <div class="heal-stage">
+        <svg class="heal-ring" viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="heal-ring-track" cx="100" cy="100" r="88"></circle>
+          <circle class="heal-ring-bar" id="healRingBar" cx="100" cy="100" r="88"></circle>
+        </svg>
+        <div class="heal-circle" id="healCircle"></div>
+      </div>
+      <div class="heal-label" id="healLabel">吸气 · 6 秒</div>
+      <div class="heal-round">第 <b id="healRoundNum">1</b> 轮 · 共 3 轮</div>
+      <button class="heal-quote" id="healQuote" aria-label="点我换一句">天行健，君子以自强不息。</button>
+      <div class="heal-actions">
+        <button class="btn btn--outline btn--sm" id="healMoodBtn">换情绪</button>
+        <button class="btn btn--outline btn--sm" id="healVoiceBtn">语音引导 · 关</button>
+      </div>
+      <div class="heal-sound">
+        <div class="chip-row" id="healSounds" aria-label="音景选择">
+          <button class="chip" data-sound="rain">雨</button>
+          <button class="chip" data-sound="stream">溪流</button>
+          <button class="chip" data-sound="fire">篝火</button>
+          <button class="chip" data-sound="wave">海浪</button>
+          <button class="chip" data-sound="noise">白噪</button>
+        </div>
+        <div class="bg-veil-row" style="margin-top:0;">
+          <label class="sr-sub" for="healVolRange">音量</label>
+          <input type="range" id="healVolRange" min="0" max="100" step="5" value="60" aria-label="音景音量">
+          <span class="mono" id="healVolVal">60%</span>
+        </div>
+      </div>
+      <div class="heal-sleep-row hidden" id="healSleepBar">
+        <span class="heal-sleep-timer" id="healSleepTimer"></span>
+        <button class="btn btn--outline btn--sm" data-sleep="15">15 分钟</button>
+        <button class="btn btn--outline btn--sm" data-sleep="30">30 分钟</button>
+        <button class="btn btn--outline btn--sm" data-sleep="60">60 分钟</button>
+        <button class="btn btn--soft btn--sm" id="healSleepStop">关闭计时</button>
+      </div>
+    </div>
+    <div class="heal-dots" id="healDots" aria-hidden="true"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="ai.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
